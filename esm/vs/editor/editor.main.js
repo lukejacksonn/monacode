@@ -1,7 +1,7 @@
-import '../language/typescript/monaco.contribution';
-import '../language/css/monaco.contribution';
-import '../language/json/monaco.contribution';
-import '../language/html/monaco.contribution';
-import '../basic-languages/monaco.contribution';
+import '../language/typescript/monaco.contribution.js';
+import '../language/css/monaco.contribution.js';
+import '../language/json/monaco.contribution.js';
+import '../language/html/monaco.contribution.js';
+import '../basic-languages/monaco.contribution.js';
 
-export * from './edcore.main';
+export * from './edcore.main.js';
