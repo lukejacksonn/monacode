@@ -78,7 +78,9 @@
     "release": "gulp release",
     "simpleserver": "gulp simpleserver",
     "test": "mocha \"out-ci/*.test.js\" --headless",
-    "website": "gulp website"
+    "website": "gulp website",
+    "build": "npx esbuild --bundle index.js --outfile=bundle.js --format=esm --minify",
+    "start": "npx servor --browse --reload --editor"
   },
   "typings": "./esm/vs/editor/editor.api.d.ts",
   "version": "0.20.0"
