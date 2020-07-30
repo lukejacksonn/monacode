@@ -18,6 +18,13 @@ self.MonacoEnvironment = {
   },
 };
 
+fetch('./theme.json')
+  .then((res) => res.json())
+  .then((data) => {
+    monaco.editor.defineTheme('theme', data);
+    monaco.editor.setTheme('theme');
+  });
+
 monaco.editor.create(document.body, {
   value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
   language: 'javascript',
