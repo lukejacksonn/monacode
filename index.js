@@ -18,7 +18,7 @@ self.MonacoEnvironment = {
   },
 };
 
-monaco.editor.create(document.getElementById('container'), {
+monaco.editor.create(document.body, {
   value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
   language: 'javascript',
 });
