@@ -26,9 +26,14 @@ fetch('./theme.json')
   });
 
 const editor = monaco.editor.create(document.body, {
-  value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
+  value: ['\nfunction x() {', '\tconsole.log("Hello world!");', '}\n'].join(
+    '\n'
+  ),
   language: 'javascript',
   fontSize: 20,
+  minimap: {
+    enabled: false,
+  },
 });
 
 window.onresize = function () {
