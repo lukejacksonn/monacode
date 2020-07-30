@@ -1,4 +1,5 @@
-import * as monaco from './esm/vs/editor/editor.main.js';
+// import * as monaco from './esm/vs/editor/editor.main.js';
+import * as monaco from './monacode.js';
 
 self.MonacoEnvironment = {
   getWorkerUrl: function (moduleId, label) {
