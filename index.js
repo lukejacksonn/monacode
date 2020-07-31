@@ -3,6 +3,13 @@ import * as monaco from './esm/vs/editor/editor.main.js';
 import prettier from './esm/prettier.js';
 import prettierPlugins from './esm/prettier-babel.js';
 
+const sheet = document.createElement('style');
+document.head.appendChild(sheet);
+
+fetch('./index.css')
+  .then((res) => res.text())
+  .then((styles) => (sheet.innerHTML = styles));
+
 self.MonacoEnvironment = {
   getWorkerUrl: function (moduleId, label) {
     if (label === 'json') return './esm/vs/language/json/json.worker.js';
