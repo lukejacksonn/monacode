@@ -1,13 +1,16 @@
 {
   "description": "A browser based code editor as an es-module",
   "license": "MIT",
-  "module": "./esm/vs/editor/editor.main.js",
+  "module": "./index.min.js",
   "name": "monacode",
   "private": false,
   "scripts": {
-    "build": "npx esbuild --bundle esm/vs/editor/editor.main.js --outfile=monacode.js --format=esm --minify",
-    "start": "npx servor --browse --reload --editor"
+    "build": "esbuild --bundle index.js --outfile=index.min.js --format=esm --minify",
+    "start": "servor --browse --reload --editor"
   },
-  "typings": "./esm/vs/editor/editor.api.d.ts",
-  "version": "0.20.0"
+  "version": "0.1.0",
+  "devDependencies": {
+    "esbuild": "0.6.12",
+    "servor": "4.0.2"
+  }
 }

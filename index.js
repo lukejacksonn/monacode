@@ -1,7 +1,7 @@
 import * as monaco from './esm/vs/editor/editor.main.js';
 
-import prettier from './prettier.js';
-import prettierPlugins from './prettier-babel.js';
+import prettier from './esm/prettier.js';
+import prettierPlugins from './esm/prettier-babel.js';
 
 self.MonacoEnvironment = {
   getWorkerUrl: function (moduleId, label) {
@@ -76,7 +76,7 @@ window.onresize = function () {
 
 const alt = (e) => (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey);
 const hotKeys = (e) => {
-  // Cdm + s
+  // Cdm + s formats with prettier
   if (alt(e) && e.keyCode == 83) {
     e.preventDefault();
     const val = editor.getValue();
@@ -109,9 +109,13 @@ const hotKeys = (e) => {
       computePosition(prettyVal.formatted, prettyVal.cursorOffset)
     );
   }
-  // Cmd + p
+  // Cmd + p opens the command palette
   if (alt(e) && e.keyCode == 80) {
     editor.trigger('anyString', 'editor.action.quickCommand');
+    e.preventDefault();
+  }
+  // Cmd + d prevents browser bookmark dialog
+  if (alt(e) && e.keyCode == 68) {
     e.preventDefault();
   }
 };
