@@ -5,25 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Monacode</title>
     <link rel="stylesheet" href="./index.css" />
-    <script src="./index.min.js" type="module"></script>
-    <!-- <script type="module">
-      import editor from './index.js';
+    <script type="module">
+      import editor from './index.min.js';
       editor({
-        theme: 'vs-dark',
-        container: document.body,
+        container: document.querySelector('#e1'),
+        value: `
+  function x() {
+    const x = 1;
+    let y = 2;
+
+    const zz = { a: 1324568675432456, b: 8796574356789976543678, c: 2345678754435678754635, d: 123029 }
+
+    return x + y;
+  }
+    `,
+        minimap: {
+          enabled: true,
+        },
       });
-    </script> -->
+    </script>
     <style>
       body {
+        background: #111;
+      }
+      #app {
         margin: 0;
         position: absolute;
-        top: 5vmin;
-        right: 5vmin;
-        bottom: 5vmin;
-        left: 5vmin;
-        background: #1f1f1f;
+        top: 2vmin;
+        right: 2vmin;
+        bottom: 2vmin;
+        left: 2vmin;
+        display: grid;
+        grid-gap: 2vmin;
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+        grid-template-rows: repeat(auto-fit, minmax(20%, 1fr));
       }
     </style>
   </head>
-  <body></body>
+  <body>
+    <div id="app">
+      <div id="e1"></div>
+    </div>
+  </body>
 </html>

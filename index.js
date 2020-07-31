@@ -39,6 +39,23 @@ const computePosition = (code, offset) => {
   return { lineNumber: line, column: col };
 };
 
+const editorDefaults = {
+  value: '',
+  language: 'javascript',
+  theme: 'vs-dark',
+  formatOnType: false,
+  fontSize: 16,
+  tabSize: 2,
+  lineNumbersMinChars: 3,
+  minimap: {
+    enabled: false,
+  },
+  scrollbar: {
+    useShadows: false,
+  },
+  mouseWheelZoom: true,
+};
+
 //   fetch('./theme.json')
 //     .then((res) => res.json())
 //     .then((data) => {
@@ -46,78 +63,65 @@ const computePosition = (code, offset) => {
 //       monaco.editor.setTheme('theme');
 //     });
 
-const editor = monaco.editor.create(document.body, {
-  value: `
-  function x() {
-    const x = 1;
-    let y = 2;
+export default (options) => {
+  const { container, ...restOfOptions } = options;
 
-    const zz = { a: 1324568675432456, b: 8796574356789976543678, c: 2345678754435678754635 }
+  const editor = monaco.editor.create(container, {
+    ...editorDefaults,
+    ...restOfOptions,
+  });
 
-    return x + y;
-  }
-    `,
-  theme: 'vs-dark',
-  language: 'javascript',
-  formatOnType: false,
-  fontSize: 20,
-  tabSize: 2,
-  minimap: {
-    enabled: true,
-  },
-  scrollbar: {
-    useShadows: false,
-  },
-});
+  addEventListener('resize', function () {
+    editor.layout();
+  });
 
-window.onresize = function () {
-  editor.layout();
+  const alt = (e) => (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey);
+  const hotKeys = (e) => {
+    // Cdm + s formats with prettier
+    if (alt(e) && e.keyCode == 83) {
+      e.preventDefault();
+      const val = editor.getValue();
+      const pos = editor.getPosition();
+
+      const prettyVal = prettier.formatWithCursor(val, {
+        parser: 'babel',
+        plugins: prettierPlugins,
+        cursorOffset: computeOffset(val, pos),
+      });
+
+      editor.executeEdits('prettier', [
+        {
+          identifier: 'delete',
+          range: editor.getModel().getFullModelRange(),
+          text: '',
+          forceMoveMarkers: true,
+        },
+      ]);
+      editor.executeEdits('prettier', [
+        {
+          identifier: 'insert',
+          range: new monaco.Range(1, 1, 1, 1),
+          text: prettyVal.formatted,
+          forceMoveMarkers: true,
+        },
+      ]);
+      editor.setSelection(new monaco.Range(0, 0, 0, 0));
+      editor.setPosition(
+        computePosition(prettyVal.formatted, prettyVal.cursorOffset)
+      );
+    }
+    // Cmd + p opens the command palette
+    if (alt(e) && e.keyCode == 80) {
+      editor.trigger('anyString', 'editor.action.quickCommand');
+      e.preventDefault();
+    }
+    // Cmd + d prevents browser bookmark dialog
+    if (alt(e) && e.keyCode == 68) {
+      e.preventDefault();
+    }
+  };
+
+  container.addEventListener('keydown', hotKeys);
+
+  return editor;
 };
-
-const alt = (e) => (navigator.platform.match('Mac') ? e.metaKey : e.ctrlKey);
-const hotKeys = (e) => {
-  // Cdm + s formats with prettier
-  if (alt(e) && e.keyCode == 83) {
-    e.preventDefault();
-    const val = editor.getValue();
-    const pos = editor.getPosition();
-
-    const prettyVal = prettier.formatWithCursor(val, {
-      parser: 'babel',
-      plugins: prettierPlugins,
-      cursorOffset: computeOffset(val, pos),
-    });
-
-    editor.executeEdits('prettier', [
-      {
-        identifier: 'delete',
-        range: editor.getModel().getFullModelRange(),
-        text: '',
-        forceMoveMarkers: true,
-      },
-    ]);
-    editor.executeEdits('prettier', [
-      {
-        identifier: 'insert',
-        range: new monaco.Range(1, 1, 1, 1),
-        text: prettyVal.formatted,
-        forceMoveMarkers: true,
-      },
-    ]);
-    editor.setSelection(new monaco.Range(0, 0, 0, 0));
-    editor.setPosition(
-      computePosition(prettyVal.formatted, prettyVal.cursorOffset)
-    );
-  }
-  // Cmd + p opens the command palette
-  if (alt(e) && e.keyCode == 80) {
-    editor.trigger('anyString', 'editor.action.quickCommand');
-    e.preventDefault();
-  }
-  // Cmd + d prevents browser bookmark dialog
-  if (alt(e) && e.keyCode == 68) {
-    e.preventDefault();
-  }
-};
-
-addEventListener('keydown', hotKeys);
