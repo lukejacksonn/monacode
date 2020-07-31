@@ -3,18 +3,11 @@ import * as monaco from './monacode.js';
 
 self.MonacoEnvironment = {
   getWorkerUrl: function (moduleId, label) {
-    // if (label === 'json') {
-    //   return './json.worker.bundle.js';
-    // }
-    // if (label === 'css') {
-    //   return './css.worker.bundle.js';
-    // }
-    // if (label === 'html') {
-    //   return './html.worker.bundle.js';
-    // }
-    if (label === 'typescript' || label === 'javascript') {
+    if (label === 'json') return './esm/vs/language/json/json.worker.js';
+    if (label === 'css') return './esm/vs/language/css/css.worker.js';
+    if (label === 'html') return './esm/vs/language/html/html.worker.js';
+    if (label === 'typescript' || label === 'javascript')
       return './esm/vs/language/typescript/ts.worker.js';
-    }
     return './esm/vs/editor/editor.worker.js';
   },
 };
