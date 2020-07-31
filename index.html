@@ -3,13 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Monacode</title>
     <link rel="stylesheet" href="./index.css" />
-    <script type="module" src="./index.js" defer></script>
+    <script src="./index.js" type="module"></script>
+    <!-- <script type="module">
+      import editor from './index.js';
+      editor({
+        theme: 'vs-dark',
+        container: document.body,
+      });
+    </script> -->
     <style>
       body {
         margin: 0;
-        height: 100vh;
+        position: absolute;
+        top: 5vmin;
+        right: 5vmin;
+        bottom: 5vmin;
+        left: 5vmin;
+        background: #1f1f1f;
       }
     </style>
   </head>
