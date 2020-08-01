@@ -1,14 +1,14 @@
 {
   "description": "A thin es-module wrapper around the monaco editor and prettier",
   "license": "MIT",
-  "main": "./index.js",
+  "main": "./index.min.js",
   "module": "./index.min.js",
   "name": "monacode",
   "scripts": {
     "build": "esbuild --bundle index.js --outfile=index.min.js --format=esm --minify",
     "start": "servor --browse --reload --editor"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "devDependencies": {
     "esbuild": "0.6.12",
     "servor": "4.0.2"
