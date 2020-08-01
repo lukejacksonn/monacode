@@ -1,7 +1,7 @@
-import * as monaco from './esm/vs/editor/editor.main.js';
+import * as monaco from './src/monaco/editor/editor.main.js';
 
-import prettier from './esm/prettier.js';
-import prettierPlugins from './esm/prettier-babel.js';
+import prettier from './src/prettier.js';
+import prettierBabel from './src/prettier-babel.js';
 
 const sheet = document.createElement('style');
 document.head.appendChild(sheet);
@@ -12,12 +12,12 @@ fetch('./index.css')
 
 self.MonacoEnvironment = {
   getWorkerUrl: function (moduleId, label) {
-    if (label === 'json') return './esm/vs/language/json/json.worker.js';
-    if (label === 'css') return './esm/vs/language/css/css.worker.js';
-    if (label === 'html') return './esm/vs/language/html/html.worker.js';
+    if (label === 'json') return './src/monaco/language/json/json.worker.js';
+    if (label === 'css') return './src/monaco/language/css/css.worker.js';
+    if (label === 'html') return './src/monaco/language/html/html.worker.js';
     if (label === 'typescript' || label === 'javascript')
-      return './esm/vs/language/typescript/ts.worker.js';
-    return './esm/vs/editor/editor.worker.js';
+      return './src/monaco/language/typescript/ts.worker.js';
+    return './src/monaco/editor/editor.worker.js';
   },
 };
 
@@ -63,12 +63,12 @@ const editorDefaults = {
   mouseWheelZoom: true,
 };
 
-//   fetch('./theme.json')
-//     .then((res) => res.json())
-//     .then((data) => {
-//       monaco.editor.defineTheme('theme', data);
-//       monaco.editor.setTheme('theme');
-//     });
+// fetch('./theme.json')
+//   .then((res) => res.json())
+//   .then((data) => {
+//     monaco.editor.defineTheme('theme', data);
+//     monaco.editor.setTheme('theme');
+//   });
 
 export default (options) => {
   const { container, ...restOfOptions } = options;
@@ -92,7 +92,7 @@ export default (options) => {
 
       const prettyVal = prettier.formatWithCursor(val, {
         parser: 'babel',
-        plugins: prettierPlugins,
+        plugins: prettierBabel,
         cursorOffset: computeOffset(val, pos),
       });
 
@@ -104,6 +104,7 @@ export default (options) => {
           forceMoveMarkers: true,
         },
       ]);
+
       editor.executeEdits('prettier', [
         {
           identifier: 'insert',
@@ -112,6 +113,7 @@ export default (options) => {
           forceMoveMarkers: true,
         },
       ]);
+
       editor.setSelection(new monaco.Range(0, 0, 0, 0));
       editor.setPosition(
         computePosition(prettyVal.formatted, prettyVal.cursorOffset)

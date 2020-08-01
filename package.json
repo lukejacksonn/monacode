@@ -1,9 +1,9 @@
 {
-  "description": "A browser based code editor as an es-module",
+  "description": "A thin es-module wrapper around the monaco editor and prettier",
   "license": "MIT",
+  "main": "./index.js",
   "module": "./index.min.js",
   "name": "monacode",
-  "private": false,
   "scripts": {
     "build": "esbuild --bundle index.js --outfile=index.min.js --format=esm --minify",
     "start": "servor --browse --reload --editor"
