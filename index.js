@@ -6,6 +6,8 @@ import prettierBabel from './src/prettier-babel.js';
 const sheet = document.createElement('style');
 document.head.appendChild(sheet);
 
+sheet.innerHTML = '.monaco-editor { display: none; }';
+
 fetch('./index.css')
   .then((res) => res.text())
   .then((styles) => (sheet.innerHTML = styles));
