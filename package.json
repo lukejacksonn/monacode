@@ -8,7 +8,7 @@
     "build": "esbuild --bundle index.js --outfile=index.min.js --format=esm --minify",
     "start": "servor --browse --reload --editor"
   },
-  "version": "0.1.2",
+  "version": "0.1.3",
   "devDependencies": {
     "esbuild": "0.6.12",
     "servor": "4.0.2"
