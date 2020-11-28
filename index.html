@@ -6,10 +6,9 @@
     <title>Monacode</title>
     <script type="module">
 
-      import(window.location.hostname === "localhost" ? "./index.js" : "./index.min.js").then(module => {
-
-        // Create a new editor and attatch to the document body
-        const editor = module.default({
+      const search = new URLSearchParams(document.location.search.substring(1))
+      const overrides = Object.fromEntries(search);
+      const defaults = {
           container: document.body,
           value: `
 const values = { a: "1324568675432456", b: 8796574356789976543678, c: [2345678754435678754635], d: true }
@@ -21,7 +20,14 @@ let y = 2;
 
 const result = add(x, y)
 `.trim(),
-        });
+      }
+
+      import(window.location.hostname === "localhost"
+        ? "./index.js"
+        : "./index.min.js"
+      ).then(module => {
+        // Create a new editor and attatch to the document body
+        const editor = module.default({ ...defaults, ...overrides });
 
         // Listen for changes within the editor
         editor.getModel().onDidChangeContent(change => {
