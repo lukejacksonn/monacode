@@ -5,11 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Monacode</title>
     <script type="module">
-      import editor from './index.min.js';
-      editor({
-        container: document.body,
-        value: `function x() {\n\tconst x = 1;\n\tlet y = 2;\n\tconst zz = { a: 1324568675432456, b: 8796574356789976543678, c: 2345678754435678754635, d: 123029 };\n\treturn x + y;\n}`,
-      });
+
+      import(window.location.hostname === "localhost" ? "./index.js" : "./index.min.js").then(module => {
+
+        // Create a new editor and attatch to the document body
+        const editor = module.default({
+          container: document.body,
+          value: `
+const values = { a: 1324568675432456, b: 8796574356789976543678, c: 2345678754435678754635, d: 123029 }
+
+const add = (x: number, y: number) => x + y;
+
+let x = 1;
+let y = 2;
+
+const result = add(x, y)
+`.trim(),
+        });
+
+        // Listen for changes within the editor
+        editor.getModel().onDidChangeContent(change => {
+          const newValue = editor.getValue();
+          console.log(newValue);
+        });
+
+      })
+
+
     </script>
     <style>
       body {

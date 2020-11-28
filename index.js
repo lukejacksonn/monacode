@@ -50,14 +50,14 @@ const computePosition = (code, offset) => {
 
 const editorDefaults = {
   value: '',
-  language: 'javascript',
+  language: 'typescript',
   theme: 'vs-dark',
   formatOnType: false,
   fontSize: 16,
   tabSize: 2,
   lineNumbersMinChars: 3,
   minimap: {
-    enabled: false,
+    enabled: true,
   },
   scrollbar: {
     useShadows: false,
