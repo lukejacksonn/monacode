@@ -8,7 +8,7 @@ Ships with all the features usually found in VS Code out of the box: things like
 
 In addition to these features, prettier has been integrated so that hitting `⌘ + s` will format the code.
 
-![monacode-demo](https://user-images.githubusercontent.com/1457604/100518413-40a88a80-3189-11eb-9f68-5269560aaf47.gif)
+<img width="100%" alt="monacode-demo" src="https://user-images.githubusercontent.com/1457604/100519495-1efed180-3190-11eb-9116-0bf1a619e08b.gif" />
 
 ## Usage
 
@@ -40,7 +40,7 @@ The module exports a single default function which accepts a config object as an
 - `value`: a string representing the initial code to be rendered within the editor
 - `language`: a string representing what language the editor should try syntax highlight and hint for
 - `fontSize`: a number indicating what pixel font size code should render at
-- `theme`: a string identifier of the desired theme (currently only default themes are supported)
+- `theme`: a string identifier of the desired theme or a url to a theme json file
 
 Calling the default export returns an instance of the underlying monaco editor. Find out more about how to interact with the editor by reading the [API documentation](https://microsoft.github.io/monaco-editor/api/index.html).
 

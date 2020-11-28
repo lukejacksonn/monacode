@@ -65,13 +65,6 @@ const editorDefaults = {
   mouseWheelZoom: true,
 };
 
-// fetch('./theme.json')
-//   .then((res) => res.json())
-//   .then((data) => {
-//     monaco.editor.defineTheme('theme', data);
-//     monaco.editor.setTheme('theme');
-//   });
-
 export default (options) => {
   const { container, ...restOfOptions } = options;
 
@@ -79,6 +72,19 @@ export default (options) => {
     ...editorDefaults,
     ...restOfOptions,
   });
+
+  // Import themes directly from the amazing collection by @brijeshb42
+  // https://raw.githubusercontent.com/brijeshb42/monaco-themes/master/themes
+
+  if (options.theme === 'vs-light') container.style.backgroundColor = '#fff';
+  if (options.theme?.startsWith('http') || options.theme?.startsWith('./'))
+    fetch(options.theme)
+      .then((res) => res.json())
+      .then((data) => {
+        monaco.editor.defineTheme('theme', data);
+        monaco.editor.setTheme('theme');
+        container.style.backgroundColor = data.colors['editor.background'];
+      });
 
   addEventListener('resize', function () {
     editor.layout();
