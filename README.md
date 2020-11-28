@@ -57,7 +57,7 @@ npm start
 Running the following command from the root of this project uses [`esbuild`](https://github.com/evanw/esbuild) build the source to a single `index.min.js` file. Currently this process takes ~1second and results in an output file weighing 4.6MB (commpresses down to less than 1MB with brotli).
 
 ```bash
-npm build
+npm run build
 ```
 
 ## License
