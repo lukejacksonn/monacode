@@ -8,7 +8,7 @@ document.head.appendChild(sheet);
 
 sheet.innerHTML = '.monaco-editor { display: none; }';
 
-fetch('./index.css')
+fetch('./src/index.css')
   .then((res) => res.text())
   .then((styles) => (sheet.innerHTML = styles));
 
