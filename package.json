@@ -9,7 +9,7 @@
     "start": "servor --browse --reload --editor",
     "prepublish": "npm run build"
   },
-  "version": "0.3.0",
+  "version": "0.3.1",
   "devDependencies": {
     "esbuild": "0.6.12",
     "servor": "4.0.2"

@@ -35,10 +35,12 @@ editor.getModel().onDidChangeContent((change) => {
 It is also possible to embed the editor into your application using an iframe (see [demo](https://esm.codes/#Ly8gU2ltcGxlIG1vbmFjb2RlIGV4YW1wbGUgQGx1a2VqYWNrc29ubgovLyAtLS0tLS0tLS0tLS0tLS0tCiAgICAKaW1wb3J0IHsgcmVuZGVyLCBodG1sIH0gZnJvbSAnaHR0cHM6Ly9ucG0ucmV2ZXJzZWh0dHAuY29tL3ByZWFjdCxwcmVhY3QvaG9va3MsaHRtL3ByZWFjdCc7CgpyZW5kZXIoaHRtbGAKICA8aWZyYW1lCiAgICB3aWR0aD0iMTAwJSIKICAgIGhlaWdodD0iMTAwJSIKICAgIGZyYW1lQm9yZGVyPSIwIgogICAgc3JjPSJodHRwczovL21vbmFjb2RlLmxpdmU/dGhlbWU9dnMtZGFyayIKICAvPgpgLCBkb2N1bWVudC5ib2R5KQ==)):
 
 ```html
-<iframe src="https://monacode.live?theme=vs-light"></iframe>
+<iframe
+  src="https://monacode.live?theme=vs-light&value=console.log('hey')"
+></iframe>
 ```
 
-Pass config options into the iframe as URL search parameters, for example `?theme=vs-light&value=console.log('hey')`. It is not currently possible to pass in nested config options but hopefully will be in the future.
+Pass config options into the iframe as URL search parameters, making sure to URI encode values properly. Please note however, it is not currently possible to pass in nested config options.
 
 ## API
 
