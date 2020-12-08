@@ -2,6 +2,7 @@ import * as monaco from './src/monaco/editor/editor.main.js';
 
 import prettier from './src/prettier.js';
 import prettierBabel from './src/prettier-babel.js';
+import prettierHtml from './src/prettier-html.js';
 
 const sheet = document.createElement('style');
 document.head.appendChild(sheet);
@@ -72,6 +73,7 @@ export default (options) => {
     ...editorDefaults,
     ...restOfOptions,
   });
+  const language = editor.getModel().getModeId();
 
   // Import themes directly from the amazing collection by @brijeshb42
   // https://raw.githubusercontent.com/brijeshb42/monaco-themes/master/themes
@@ -99,8 +101,8 @@ export default (options) => {
       const pos = editor.getPosition();
 
       const prettyVal = prettier.formatWithCursor(val, {
-        parser: 'babel',
-        plugins: prettierBabel,
+        parser: language === 'html' ? 'html' : 'babel',
+        plugins: [language === 'html' ? prettierHtml : prettierBabel],
         cursorOffset: computeOffset(val, pos),
       });
 
