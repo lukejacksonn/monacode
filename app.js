@@ -21,16 +21,13 @@ document.body.innerHTML = \`
     <h1 class="\${tw\`font-bold text(center 5xl white sm:gray-800 md:pink-700)\`}">This is Twind!</h1>
   </main>
 \`
-
 `.trim(),
 };
 
 import(
   window.location.hostname === 'localhost' ? './index.min.js' : './index.min.js'
 ).then((module) => {
-  // Create a new editor and attatch to the document body
-  const editor = module.default({ ...defaults, ...overrides });
-  const compile = (src) => {
+  const onSave = (src) => {
     const preview = document.querySelector('#preview');
     preview.src = `data:text/html;base64,${btoa(
       `<script type="module">${
@@ -39,10 +36,17 @@ import(
     )}`;
   };
 
-  compile(defaults.value);
+  // Create a new editor and attatch to the document body
+  const editor = module.default({
+    ...defaults,
+    ...overrides,
+    onSave,
+  });
+
+  onSave(defaults.value);
   // Listen for changes within the editor
   editor.getModel().onDidChangeContent((change) => {
-    const val = editor.getValue();
-    val && compile(val);
+    // const val = editor.getValue();
+    // val && compile(val);
   });
 });

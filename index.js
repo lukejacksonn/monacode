@@ -100,6 +100,8 @@ export default (options) => {
       const val = editor.getValue();
       const pos = editor.getPosition();
 
+      options.onSave && options.onSave(val);
+
       const prettyVal = prettier.formatWithCursor(val, {
         parser: 'babel',
         plugins: prettierBabel,
