@@ -1,5 +1,7 @@
 import * as monaco from './src/monaco/editor/editor.main.js';
 
+export { transform } from 'sucrase';
+
 import prettier from './src/prettier.js';
 import prettierBabel from './src/prettier-babel.js';
 

@@ -12,6 +12,7 @@
   "version": "0.3.1",
   "devDependencies": {
     "esbuild": "0.6.12",
-    "servor": "4.0.2"
+    "servor": "4.0.2",
+    "sucrase": "^3.17.1"
   }
 }
