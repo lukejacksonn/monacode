@@ -1,10 +1,6 @@
 import * as monaco from './src/monaco/editor/editor.main.js';
 
 export { transform } from 'sucrase';
-
-import prettier from './src/prettier.js';
-import prettierBabel from './src/prettier-babel.js';
-
 const sheet = document.createElement('style');
 document.head.appendChild(sheet);
 
@@ -25,30 +21,47 @@ self.MonacoEnvironment = {
   },
 };
 
-const computeOffset = (code, pos) => {
-  let line = 1;
-  let col = 1;
-  let offset = 0;
-  while (offset < code.length) {
-    if (line === pos.lineNumber && col === pos.column) return offset;
-    if (code[offset] === '\n') line++, (col = 1);
-    else col++;
-    offset++;
-  }
-  return -1;
-};
+monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+  noSemanticValidation: true,
+  noSyntaxValidation: true,
+});
 
-const computePosition = (code, offset) => {
-  let line = 1;
-  let col = 1;
-  let char = 0;
-  while (char < offset) {
-    if (code[char] === '\n') line++, (col = 1);
-    else col++;
-    char++;
-  }
-  return { lineNumber: line, column: col };
-};
+monaco.languages.registerDocumentFormattingEditProvider('typescript', {
+  async provideDocumentFormattingEdits(model) {
+    const prettier = await import('prettier/standalone');
+    const typescript = await import('prettier/parser-typescript');
+    const text = prettier.format(model.getValue(), {
+      parser: 'typescript',
+      plugins: [typescript],
+      singleQuote: true,
+    });
+
+    return [
+      {
+        range: model.getFullModelRange(),
+        text,
+      },
+    ];
+  },
+});
+
+monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
+monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+
+// const compilerOptions = {
+//   // allowJs: true,
+//   // allowSyntheticDefaultImports: true,
+//   // alwaysStrict: true,
+//   jsx: 2,
+//   jsxFactory: 'React.createElement',
+// };
+
+// monaco.languages.typescript.typescriptDefaults.setCompilerOptions(
+//   compilerOptions
+// );
+// monaco.languages.typescript.javascriptDefaults.setCompilerOptions(
+//   compilerOptions
+// );
 
 const editorDefaults = {
   value: '',
@@ -67,6 +80,8 @@ const editorDefaults = {
   mouseWheelZoom: true,
 };
 
+const extraLibs = new Map();
+
 export default (options) => {
   const { container, ...restOfOptions } = options;
 
@@ -74,6 +89,71 @@ export default (options) => {
     ...editorDefaults,
     ...restOfOptions,
   });
+
+  // const addTypings = ({ typings }) => {
+  //   Object.keys(typings).forEach((path) => {
+  //     let extraLib = extraLibs.get(path);
+
+  //     extraLib && extraLib.dispose();
+  //     extraLib = monaco.languages.typescript.javascriptDefaults.addExtraLib(
+  //       typings[path],
+  //       path
+  //     );
+
+  //     extraLibs.set(path, extraLib);
+  //   });
+  // };
+
+  // // Intialize the type definitions worker
+  // const typingsWorker = new Worker('./typings.js');
+  // typingsWorker.addEventListener('message', ({ data }) => addTypings(data));
+
+  // // Fetch some definitions
+  // const dependencies = {
+  //   react: '16.3.1',
+  // };
+
+  // Object.keys(dependencies).forEach((name) =>
+  //   typingsWorker.postMessage({
+  //     name,
+  //     version: dependencies[name],
+  //   })
+  // );
+
+  // const updateDecorations = async (classifications) => {
+  //   console.log(classifications);
+  //   const decorations = classifications.map((classification) => ({
+  //     range: new monaco.Range(
+  //       classification.startLine,
+  //       classification.start,
+  //       classification.endLine,
+  //       classification.end
+  //     ),
+  //     options: {
+  //       inlineClassName: classification.type
+  //         ? `${classification.kind} ${classification.type}-of-${classification.parentKind}`
+  //         : classification.kind,
+  //     },
+  //   }));
+
+  //   const modelInfo = await editor.getModel();
+  //   modelInfo.decorations = editor.deltaDecorations(
+  //     modelInfo.decorations || [],
+  //     decorations
+  //   );
+  // };
+
+  // const syntaxWorker = new Worker('./syntax-highlighter.js');
+  // syntaxWorker.addEventListener('message', (event) => {
+  //   const { classifications, version } = event.data;
+  //   requestAnimationFrame(() => {
+  //     if (editor.getModel()) {
+  //       if (version === editor.getModel().getVersionId()) {
+  //         updateDecorations(classifications);
+  //       }
+  //     }
+  //   });
+  // });
 
   // Import themes directly from the amazing collection by @brijeshb42
   // https://raw.githubusercontent.com/brijeshb42/monaco-themes/master/themes
@@ -98,38 +178,15 @@ export default (options) => {
     if (alt(e) && e.keyCode == 83) {
       e.preventDefault();
       const val = editor.getValue();
-      const pos = editor.getPosition();
 
+      // syntaxWorker.postMessage({
+      //   code: val,
+      //   title: '',
+      //   version: editor.getModel().getVersionId(),
+      // });
+
+      editor.getAction('editor.action.formatDocument').run();
       options.onSave && options.onSave(val);
-
-      const prettyVal = prettier.formatWithCursor(val, {
-        parser: 'babel',
-        plugins: prettierBabel,
-        cursorOffset: computeOffset(val, pos),
-      });
-
-      editor.executeEdits('prettier', [
-        {
-          identifier: 'delete',
-          range: editor.getModel().getFullModelRange(),
-          text: '',
-          forceMoveMarkers: true,
-        },
-      ]);
-
-      editor.executeEdits('prettier', [
-        {
-          identifier: 'insert',
-          range: new monaco.Range(1, 1, 1, 1),
-          text: prettyVal.formatted,
-          forceMoveMarkers: true,
-        },
-      ]);
-
-      editor.setSelection(new monaco.Range(0, 0, 0, 0));
-      editor.setPosition(
-        computePosition(prettyVal.formatted, prettyVal.cursorOffset)
-      );
     }
     // Cmd + p opens the command palette
     if (alt(e) && e.keyCode == 80) {

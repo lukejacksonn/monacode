@@ -14,5 +14,8 @@
     "esbuild": "0.6.12",
     "servor": "4.0.2",
     "sucrase": "^3.17.1"
+  },
+  "dependencies": {
+    "prettier": "^2.2.1"
   }
 }
